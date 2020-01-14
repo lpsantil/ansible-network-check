@@ -1,0 +1,17 @@
+---
+
+- name: stop firewalld and iptables
+  hosts: all
+  become: yes
+
+  tasks:
+
+  - name: stop firewalld
+    systemd:
+      name: firewalld
+      state: stopped
+
+  - name: stop iptables
+    systemd:
+      name: iptables
+      state: stopped
