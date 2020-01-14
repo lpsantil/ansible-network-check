@@ -2,27 +2,48 @@
 #  hosts: ansible_network_health_check_to
 #  gather_facts: yes
 #  tasks:
+
+  # Delete the file before fetch
+  - name: Remove the local tmp directory before fetch
+    file:
+      path: "/tmp/ansible-network-check/{{check_to_host}}/localhost/tmp/ansible_network_health_check_to/{{test_protocol}}_{{test_to_ip}}_{{test_port}}_OUTPUT"
+      path: "/tmp/ansible-network-check/"
+      state: absent
+
+  - name: Create the /tmp/ansible-network-check/ directory
+    file:
+      path: "/tmp/ansible-network-check"
+      state: directory
+
+  # Fetch the file
+  - name: Fetch the remote file
+    delegate_to: "{{check_to_host}}"
+    fetch:
+      src: "/tmp/ansible_network_health_check_to/{{test_protocol}}_{{test_to_ip}}_{{test_port}}_OUTPUT"
+      dest: "/tmp/ansible-network-check/{{check_to_host}}/"
+
   - name: Check server status
-#    when: check_to_host ==  inventory_hostname
-    delegated_to: "{{check_to_host}}"
-    with_lines: "cat /tmp/ansible_network_health_check_to/{{test_protocol}}_{{test_to_ip}}_{{test_port}}_OUTPUT"
+    with_lines: '/usr/bin/cat /tmp/ansible-network-check/{{check_to_host}}/localhost/tmp/ansible_network_health_check_to/{{test_protocol}}_{{test_to_ip}}_{{test_port}}_OUTPUT'
     include_tasks: tasks/register_test_result.yaml
     vars: 
       test_result_string: "{{item}}"
 
+  - name: Remove the local tmp directory before fetch
+    file:
+      #path: "/tmp/ansible-network-check/{{check_to_host}}/localhost/tmp/ansible_network_health_check_to/{{test_protocol}}_{{test_to_ip}}_{{test_port}}_OUTPUT"
+      path: "/tmp/ansible-network-check"
+      state: absent
+
   - name: Ensure no existing process running
-    delegated_to: "{{check_to_host}}"
-#    when: check_to_host ==  inventory_hostname
+    delegate_to: "{{check_to_host}}"
     shell: |
       for PIDFILE in $(ls /tmp/ansible_network_health_check_to/*PID); do
          kill -9 $(cat $PIDFILE)
       done
       exit 0
 
-  - name: ensure tmp folder doesnot exist for clean start
-    delegated_to: "{{check_to_host}}"
-#    when: check_to_host ==  inventory_hostname
+  - name: Ensure tmp folder doesnot exist for clean start
+    delegate_to: "{{check_to_host}}"
     file:
       path: /tmp/ansible_network_health_check_to/
       state: absent
-
