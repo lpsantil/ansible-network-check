@@ -44,7 +44,6 @@ By this way we can make the connectivity green. And all the others not being abl
 ```
 |- callback_plugins
 |   | - installer_checkpoint.py
-|   | - installer_checkpoint.pyc
 | - files
 |   | - tcpClient.py
 |   | - tcpServer.py
@@ -53,7 +52,6 @@ By this way we can make the connectivity green. And all the others not being abl
 | - inventory
 | - lookup_plugins
 |   | - ip.py
-|   | - ip.pyc
 | - main.yaml
 | - port_definition.yaml
 | - tasks
