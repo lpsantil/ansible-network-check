@@ -1,8 +1,12 @@
 port_definitions:
+
+# 4789 = SDN
 - from_group: nodes
   to_group: nodes
   type: udp
   port: 4789
+
+# 8053 == DNS
 - from_group: nodes
   to_group: masters
   type: udp
@@ -11,51 +15,90 @@ port_definitions:
   to_group: masters
   type: tcp
   port: 8053
+
+# 443 = console and api
+- from_group: nodes
+  to_group: masters
+  type: tcp
+  port: 443
+
+# 8443 = console and api
 - from_group: nodes
   to_group: masters
   type: tcp
   port: 8443
+
+# 10250 = kubelet for OC commands
 - from_group: masters
   to_group: nodes
   type: tcp
   port: 10250
-- from_group: masters
-  to_group: nodes
-  type: tcp
-  port: 10010
+
+## 10010 = CRI-O
+#- from_group: masters
+#  to_group: nodes
+#  type: tcp
+#  port: 10010
+
+# 8053 = DNS
 - from_group: masters
   to_group: masters
   type: udp
   port: 8053
 
 # Optional for NFS
-- from_group: masters
-  to_group: masters
-  type: udp
-  port: 2049
+#- from_group: masters
+#  to_group: masters
+#  type: udp
+#  port: 2049
 
-
+# 2379 = ETCD
 - from_group: masters
   to_group: masters
   type: tcp
   port: 2379
+# 2380 = ETCD
 - from_group: masters
   to_group: masters
   type: tcp
   port: 2380
 
 ################ addition for 3.11 prometheus monitoring
-- from_group: nodes
+#
+# 9100 = Prometheus metrics
+- from_group: ops-nodes
   to_group: nodes
   type: tcp
   port: 9100
 
-- from_group: nodes
+# 10250 = kubelet for OC commands
+- from_group: ops-nodes
   to_group: nodes
   type: tcp
   port: 10250
 
-- from_group: nodes
-  to_group: nodes
-  type: udp
-  port: 8444
+# 8444 = controller service metrics endpoints
+#- from_group: ops-nodes
+#  to_group: nodes
+#  type: udp
+#  port: 8444
+
+####
+#
+# 9100 = Prometheus metrics
+- from_group: ops-nodes
+  to_group: ops-nodes
+  type: tcp
+  port: 9100
+
+# 10250 = kubelet for OC commands
+- from_group: ops-nodes
+  to_group: ops-nodes
+  type: tcp
+  port: 10250
+
+# 8444 = controller service metrics endpoints
+#- from_group: ops-nodes
+#  to_group: ops-nodes
+#  type: udp
+#  port: 8444
