@@ -49,13 +49,13 @@ By this way we can make the connectivity green. And all the others not being abl
 |   | - tcpServer.py
 |   | - udpClient.py
 |   | - udpServer.py
-| - inventory
+| - inventory/lab/hosts
 | - lookup_plugins
 |   | - ip.py
-| - main.yaml
+| - main.yml
 | - port_definition.yaml
 | - tasks
-    | - init_phases.yaml
+    | - init_phases.yml
     | - loop_phase_from_clients.yaml
     | - loop_phase_to_server.yaml
     | - register_test_result.yaml
@@ -70,9 +70,9 @@ By this way we can make the connectivity green. And all the others not being abl
 ```
 
 ## How to use:
-1. Fill in the inventory as usual, grouping the nodes by zone or by nature. For example, Openshift groups the hosts into masters, nodes
-2. Fill in the port_definition.yaml for the ports to be scanned
-3. Run the playbook as usual
+1. Fill in the hosts inventory as usual (found in the directory `inventory/<ENV>/hosts`, grouping the nodes by zone or by nature. For example, Openshift groups the hosts into masters, nodes
+1. Fill in the port_definition.yaml for the ports to be scanned
+1. Run the playbook as usual calling the scripts via `scripts/network_check.sh`
 
 
 
